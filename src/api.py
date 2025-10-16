@@ -39,6 +39,7 @@ def predict():
         features_scaled = scaler.transform(features)
         prediction = model.predict(features_scaled)
         
+        
         return jsonify({"prediction": prediction[0]})
 
     except Exception as e:
