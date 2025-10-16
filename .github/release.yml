@@ -1,0 +1,62 @@
+name: release pipeline
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4 
+      
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: extract version from tag
+        id: get_tag
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/virtual-diabetes-clinic-triage:${{ env.TAG }}
+
+      - name: Run contrainer smoke test
+        run: |
+          docker run -d --name test-container -p 8080:8000 ghcr.io/${{ github.repository }}:${{ env.TAG }}
+          echo "Waiting for container to start..."
+          sleep 10
+
+          echo "Checking if the application is running..."
+          curl -f http://localhost:8080/health || (echo "Application is not running!" && exit 1)
+          echo "Smoke test passed!"
+            - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ env.TAG }}
+          body: |
+            Official release for version ${{ env.TAG }}.
+            See CHANGELOG.md for details.
+            
+            **Metrics (v0.1)**:
+            ```json
+            ${{ toJSON(fromJSON(file('metrics_v0.1.json'))) }}
+            ```
+          draft: false
+          prerelease: false
