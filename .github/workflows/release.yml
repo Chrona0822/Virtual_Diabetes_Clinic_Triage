@@ -43,7 +43,8 @@ jobs:
           echo "Checking if the application is running..."
           curl -f http://localhost:8080/health || (echo "Application is not running!" && exit 1)
           echo "Smoke test passed!"
-            - name: Create GitHub Release
+          
+      - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
