@@ -14,6 +14,8 @@ except FileNotFoundError:
     print(f"Error: Model file not found at {MODEL_PATH}")
     pipeline = None
 
+FEATURE_ORDER = ["age", "sex", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"]
+
 
 @app.route("/health", methods=["GET"])
 def health():
@@ -32,6 +34,7 @@ def predict():
         data = request.get_json()
         # transferm input data to DataFrame
         features = pd.DataFrame(data, index=[0])
+        features = features[FEATURE_ORDER]
 
         # make prediction
         scaler = pipeline["scaler"]
@@ -44,7 +47,8 @@ def predict():
 
     except Exception as e:
         # handle exceptions
-        return jsonify({"error": str(e)}), 400
+        app.logger.error(f"Prediction failed: {e}")
+        return jsonify({"error": "An error occurred during prediction."}), 400
 
 
 if __name__ == "__main__":
