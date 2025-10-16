@@ -43,7 +43,11 @@ jobs:
           echo "Checking if the application is running..."
           curl -f http://localhost:8080/health || (echo "Application is not running!" && exit 1)
           echo "Smoke test passed!"
-          
+      
+      - name: Read metrics file
+        id: metrics
+        run: echo "METRICS_JSON=$(cat metrics_v0.1.json)" >> $GITHUB_OUTPUT
+
       - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
@@ -57,7 +61,7 @@ jobs:
             
             **Metrics (v0.1)**:
             ```json
-            ${{ toJSON(fromJSON(file('metrics_v0.1.json'))) }}
+            ${{ steps.metrics.outputs.METRICS_JSON }}
             ```
           draft: false
           prerelease: false
