@@ -13,6 +13,8 @@ jobs:
     permissions:
       contents: write
       packages: write
+    env:
+      TAG: ${{ github.ref_name }}
 
     steps:
       - name: Checkout repository
@@ -48,7 +50,7 @@ jobs:
           sleep 10
           echo "Checking if the application is running..."
           curl -f http://localhost:8080/health || (echo "Application is not running!" && exit 1)
-          echo "Smoke test passed!"
+          echo "Smoke test passed!!"
 
       - name: Read metrics file
         id: metrics
