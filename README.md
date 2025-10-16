@@ -28,6 +28,9 @@ Hi, this ML service predicts short-term disease progression and returns a contin
 ### Health Check
 
 - **URL:** `/health`
+```bash
+curl http://localhost:8000/health
+```
 - **Method:** `GET`
 - **Success Response (200 OK):**
   ```json
@@ -39,6 +42,12 @@ Hi, this ML service predicts short-term disease progression and returns a contin
 ### Predcition
 
 - **URL:** `/predict`
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"age": 0.02, "sex": -0.044, "bmi": 0.06, "bp": -0.03, "s1": -0.02, "s2": 0.03, "s3": -0.02, "s4": 0.02, "s5": 0.02, "s6": -0.001}' \
+  http://localhost:8000/predict
+```
 - **Method:** `POST`
 - **Request Body(JSON):**
 - A JSON object with the 10 features
