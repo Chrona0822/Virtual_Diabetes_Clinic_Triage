@@ -12,7 +12,7 @@ valid_input = {
     "s3": -0.02,
     "s4": 0.02,
     "s5": 0.02,
-    "s6": -0.03,
+    "s6": -0.001,
 }
 
 invalid_input = {"age": "invalid", "sex": -0.044, "bmi": 0.06}
@@ -30,6 +30,7 @@ def test_health_check(client):
     data = response.get_json()
     assert data["status"] == "ok"
     assert "model_version" in data
+    assert isinstance(data["model_version"], str)
 
 
 def test_predict_valid_input(client):

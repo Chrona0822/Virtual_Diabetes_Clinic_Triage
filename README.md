@@ -1,5 +1,10 @@
-# Virtual_Diabetes_Clinic_Triage-
+# Virtual_Diabetes_Clinic_Triage
 Hi, this ML service predicts short-term disease progression and returns a continuous risk score.
+
+* **v0.1**: Baseline model using `StandardScaler` and `LinearRegression`.
+* **v0.2**: Improved model using a `Pipeline` with `StandardScaler` and `RandomForestRegressor`. This version also provides precision/recall metrics for a "high-risk" flag.
+
+See `CHANGELOG.md` for detailed performance metrics
 
 ## How to Run Locally
 
@@ -8,13 +13,15 @@ Hi, this ML service predicts short-term disease progression and returns a contin
 
 ### Steps
 1.  **Build the Docker Image:**
+    Replace `<version>` with the version you want to run (e.g., `v0.1` or `v0.2`).
     ```bash
-    docker build -t diabetes-service:v0.1 .
+    docker build -t diabetes-service:<version> .
     ```
 
 2.  **Run the Docker Container:**
+   Make sure to use the same `<version>` tag from the build step.
     ```bash
-    docker run -d -p 8000:8000 --name diabetes-container diabetes-service:v0.1
+    docker run -d -p 8000:8000 --name diabetes-container diabetes-service:<version>
     ```
     The service will now be running in the background and accessible at `http://localhost:8000`.
 

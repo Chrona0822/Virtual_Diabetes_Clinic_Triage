@@ -1,0 +1,7 @@
+{
+    "model_version": "0.2",
+    "rmse": 54.398350726816645,
+    "high_risk_threshold": 150.0,
+    "precision": 0.6956521739130435,
+    "recall": 0.8
+}
