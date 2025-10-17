@@ -4,7 +4,8 @@ import pandas as pd
 
 app = Flask(__name__)
 # get version of model
-MODEL_VERSION = "0.1"
+# MODEL_VERSION = "0.1"
+MODEL_VERSION = "0.2"
 MODEL_PATH = f"diabetes_pipeline_v{MODEL_VERSION}.pkl"
 # load model
 try:
